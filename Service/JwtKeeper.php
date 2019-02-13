@@ -9,16 +9,54 @@ class JwtKeeper
 	private $jwt;
 	private $jwtProvider;
 
+	/**
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageFileNameException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
+	 */
 	public function __construct(string $jwtPath, string $username, string $password)
 	{
 		$this->jwtProvider = new JwtProvider($jwtPath, $username, $password);
+		$this->provideJwt();
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
 	 */
-	public function getToken()
+	public function getJwt(): Jwt
 	{
-		return $this->jwtProvider->provideJwt();
+		$this->provideJwt();
+		return $this->jwt;
+	}
+
+	/**
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
+	 */
+	public function getToken(): string
+	{
+		return $this->getJwt()->getToken();
+	}
+
+	/**
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
+	 */
+	private function provideJwt(): void
+	{
+		$this->jwt = $this->jwtProvider->provideJwt();
 	}
 }

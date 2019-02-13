@@ -23,7 +23,7 @@ class JwtStorage
 			throw new StorageFileNameException();
 		}
 
-		$this->fileNameHash = $fileNameHash;
+		$this->fileNameHash = $fileNameHash . '.txt';
 
 		if (!is_dir(self::STORAGE_DIR)) {
 			mkdir(self::STORAGE_DIR, 0777, true);
