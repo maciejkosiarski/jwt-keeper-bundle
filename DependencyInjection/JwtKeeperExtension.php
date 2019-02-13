@@ -21,7 +21,7 @@ class JwtKeeperExtension extends Extension
 
 		$config = $this->processConfiguration($configuration, $configs);
 
-		$definition = $container->getDefinition('jwt.keeper');
+		$definition = $container->getDefinition('jwt.provider');
 		$definition->replaceArgument(0, $config['jwt_route']);
 	}
 }
