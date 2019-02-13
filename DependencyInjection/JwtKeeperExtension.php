@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MaciejKosiarski\DependencyInjection;
+namespace MaciejKosiarski\JwtKeeperBundle\DependencyInjection;
 
-use MaciejKosiarski\DependencyInjection\Configuration\Configuration;
+use MaciejKosiarski\JwtKeeperBundle\DependencyInjection\Configuration\Configuration;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;

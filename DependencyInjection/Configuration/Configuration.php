@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MaciejKosiarski\DependencyInjection\Configuration;
+namespace MaciejKosiarski\JwtKeeperBundle\DependencyInjection\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
