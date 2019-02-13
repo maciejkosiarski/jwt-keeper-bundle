@@ -11,12 +11,15 @@ class JwtProvider
 	private $password;
 	private $jwtStorage;
 
+	/**
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageFileNameException
+	 */
 	public function __construct(string $jwtPath, string $username, string $password)
 	{
 		$this->jwtPath = $jwtPath;
 		$this->username = $username;
 		$this->password = $password;
-		$this->jwtStorage = new JwtStorage($this->jwtPath);
+		$this->jwtStorage = new JwtStorage(md5( $jwtPath . $username . $password));
 	}
 
 	/**

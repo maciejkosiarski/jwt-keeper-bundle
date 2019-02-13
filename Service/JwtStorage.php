@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MaciejKosiarski\JwtKeeperBundle\Service;
 
+use MaciejKosiarski\JwtKeeperBundle\Exception\StorageFileNameException;
 use MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException;
 use MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException;
 
@@ -11,11 +12,18 @@ class JwtStorage
 {
 	const STORAGE_DIR = 'var/jwt';
 
-	private $fileName;
+	private $fileNameHash;
 
-	public function __construct(string $fileName)
+	/**
+	 * @throws StorageFileNameException
+	 */
+	public function __construct(string $fileNameHash)
 	{
-		$this->fileName = $fileName;
+		if (!strlen($fileNameHash) === 32) {
+			throw new StorageFileNameException();
+		}
+
+		$this->fileNameHash = $fileNameHash;
 
 		if (!is_dir(self::STORAGE_DIR)) {
 			mkdir(self::STORAGE_DIR, 0777, true);
@@ -52,6 +60,6 @@ class JwtStorage
 
 	private function getPath(): string
 	{
-		return sprintf('%s/%s', self::STORAGE_DIR, $this->fileName);
+		return sprintf('%s/%s', self::STORAGE_DIR, $this->fileNameHash);
 	}
 }

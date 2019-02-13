@@ -6,6 +6,7 @@ namespace MaciejKosiarski\JwtKeeperBundle\Service;
 
 class JwtKeeper
 {
+	private $jwt;
 	private $jwtProvider;
 
 	public function __construct(string $jwtPath, string $username, string $password)
