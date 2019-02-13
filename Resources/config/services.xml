@@ -5,7 +5,7 @@
         http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="jwt.provider" class="MaciejKosiarski\Service\JwtProvider">
+        <service id="jwt.provider" class="MaciejKosiarski\JwtKeeperBundle\Service\JwtProvider">
             <argument></argument>
         </service>
     </services>
