@@ -1,5 +1,23 @@
 {
+    "name" : "maciejkosiarski/jwt-keeper-bundle",
+    "type": "symfony-bundle",
+    "description" : "Bundle to keep fresh and valid json web token in cache.",
+    "keywords": ["Symfony", "jwt", "bundle"],
+    "homepage": "https://github.com/maciejkosiarski/jwt-keeper-bundle",
+    "authors" : [
+        {
+            "name": "Maciej Kosiarski"
+        }
+    ],
+    "license" : [
+        "MIT"
+    ],
     "require": {
         "symfony/http-kernel": "^4.2"
+    },
+    "autoload" : {
+    "psr-4" : {
+        "MaciejKosiarski\\JwtKeeperBundle\\" : ""
     }
+}
 }
