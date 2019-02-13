@@ -19,6 +19,5 @@
         "psr-4" : {
             "MaciejKosiarski\\JwtKeeperBundle\\" : ""
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
