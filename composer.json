@@ -16,8 +16,9 @@
         "symfony/http-kernel": "^4.2"
     },
     "autoload" : {
-    "psr-4" : {
-        "MaciejKosiarski\\JwtKeeperBundle\\" : ""
-    }
-}
+        "psr-4" : {
+            "MaciejKosiarski\\JwtKeeperBundle\\" : ""
+        }
+    },
+    "minimum-stability": "dev"
 }
