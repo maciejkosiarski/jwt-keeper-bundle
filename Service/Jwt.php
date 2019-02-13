@@ -65,7 +65,7 @@ class Jwt
 			throw new JwtException('header', 'null');
 		}
 
-		if (!property_exists($header, 'type')) {
+		if (!property_exists($header, 'typ')) {
 			throw new JwtException('token type', 'null');
 		}
 
@@ -77,11 +77,11 @@ class Jwt
 			throw new JwtException('expiration', 'null');
 		}
 
-		if (!preg_match('#[0-9]#',$payload->exp)) {
+		if (!preg_match('#[0-9]#', (string) $payload->exp)) {
 			throw new JwtException('expiration', (string) $payload->exp);
 		}
 
-		$this->type = $header->type;
+		$this->type = $header->typ;
 		$this->algorithm = $header->alg;
 		$this->expiration = (int)$payload->exp;
 		$this->payload = $payload;

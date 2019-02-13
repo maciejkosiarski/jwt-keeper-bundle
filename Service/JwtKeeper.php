@@ -17,9 +17,9 @@ class JwtKeeper
 	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
 	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
 	 */
-	public function __construct(string $jwtPath, string $username, string $password)
+	public function __construct(string $serviceUrl, string $username, string $password)
 	{
-		$this->jwtProvider = new JwtProvider($jwtPath, $username, $password);
+		$this->jwtProvider = new JwtProvider($serviceUrl, $username, $password);
 		$this->provideJwt();
 	}
 

@@ -19,12 +19,12 @@ class JwtProvider
 	/**
 	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageFileNameException
 	 */
-	public function __construct(string $jwtPath, string $username, string $password)
+	public function __construct(string $serviceUrl, string $username, string $password)
 	{
 		$this->username = $username;
 		$this->password = $password;
-		$this->jwtStorage = new JwtStorage(md5( $jwtPath . $username . $password));
-		$this->request = new Request('POST', $jwtPath . 'jwt');
+		$this->jwtStorage = new JwtStorage(md5( $serviceUrl . $username . $password));
+		$this->request = new Request('POST', $serviceUrl . 'jwt');
 	}
 
 	/**
@@ -70,14 +70,14 @@ class JwtProvider
 		$response = $httpClient->send($this->request, $this->getRequestOptions());
 
 		if ($response->getStatusCode() !== 200) {
-			$message = sprintf('Error with service %s API connection. Check jwt site.', $this->getServiceUrl());
+			$message = sprintf('Error with service %s API connection. Check jwt site.', $this->getJwtRoute());
 			throw new HttpException($response->getStatusCode(), $message);
 		}
 
 		$content = json_decode($response->getBody()->getContents());
 
 		if (!property_exists($content, 'token')) {
-			throw new InvalidJwtContentException($this->getServiceUrl(), $response->getBody()->getContents());
+			throw new InvalidJwtContentException($this->getJwtRoute(), $response->getBody()->getContents());
 		}
 
 		$this->storeJwt($content->token);
@@ -115,7 +115,7 @@ class JwtProvider
 		];
 	}
 
-	private function getServiceUrl(): string
+	private function getJwtRoute(): string
 	{
 		return $this->request->getUri()->getHost() . $this->request->getUri()->getPath();
 	}
