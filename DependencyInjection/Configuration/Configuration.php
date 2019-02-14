@@ -11,7 +11,7 @@ class Configuration implements ConfigurationInterface
 {
 	public function getConfigTreeBuilder(): TreeBuilder
 	{
-		$treeBuilder = new TreeBuilder('jwt_provider');
+		$treeBuilder = new TreeBuilder('jwt_keeper');
 		$treeBuilder->getRootNode()
 			->children()
 				->scalarNode('jwt_route')

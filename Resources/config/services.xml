@@ -6,7 +6,7 @@
 
     <services>
         <service id="jwt.provider" class="MaciejKosiarski\JwtKeeperBundle\Service\JwtProvider">
-            <argument></argument>
+            <argument>%jwt_provider.jwt_route%</argument>
         </service>
     </services>
 </container>
