@@ -81,7 +81,7 @@ class Jwt
 			$this->expiration = (int)$payload->exp;
 		}
 
-		if (!property_exists($payload, 'iat')) {
+		if (property_exists($payload, 'iat')) {
 			if (!preg_match('#[0-9]#', (string) $payload->iat)) {
 				throw new JwtException('issued at', (string) $payload->iat);
 			}

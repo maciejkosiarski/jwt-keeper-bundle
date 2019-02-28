@@ -19,12 +19,12 @@ class JwtProvider
 	/**
 	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageFileNameException
 	 */
-	public function __construct(string $serviceUrl, string $username, string $password)
+	public function __construct(string $authUrl, string $username, string $password)
 	{
 		$this->username = $username;
 		$this->password = $password;
-		$this->jwtStorage = new JwtStorage(md5( $serviceUrl . $username . $password));
-		$this->request = new Request('POST', $serviceUrl . 'jwt');
+		$this->jwtStorage = new JwtStorage(md5( $authUrl . $username . $password));
+		$this->request = new Request('POST', $authUrl);
 	}
 
 	/**
@@ -56,7 +56,8 @@ class JwtProvider
 		$jwt = $this->getJwt($token);
 
 		if ($jwt->getExpiration()) {
-			return !((new \DateTime())->format('U') > $jwt->getExpiration() - 300);
+			$currentDate = new \DateTime();
+			return !((int) $currentDate->format('U') > $jwt->getExpiration());
 		}
 
 		return true;
@@ -69,12 +70,10 @@ class JwtProvider
 	 */
 	private function refreshJwt(): void
 	{
-		$httpClient = new Client();
-
-		$response = $httpClient->send($this->request, $this->getRequestOptions());
+		$response = (new Client())->send($this->request, $this->getRequestOptions());
 
 		if ($response->getStatusCode() !== 200) {
-			$message = sprintf('Error with service %s API connection. Check jwt site.', $this->getJwtRoute());
+			$message = sprintf('Error with service %s API connection. Check jwt auth site.', $this->getJwtRoute());
 			throw new HttpException($response->getStatusCode(), $message);
 		}
 
