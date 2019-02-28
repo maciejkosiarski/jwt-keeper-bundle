@@ -56,13 +56,13 @@ Simple example:
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstarctController;
-use MaciejKosiarski\MonologFactoryBundle\Service\JwtKeeper;
+use MaciejKosiarski\JwtKeeperBundle\Service\JwtKeeper;
 
 class AppController extends AbstarctController
 {
     public function index()
     {
-        $jwtKeeper = new JwtKeeper('http://super-service/jwt', 'api', 'superpass');
+        $jwtKeeper = new JwtKeeper('http://super-service/jwt', 'username', 'superpass');
         //return JWT in string
         $jwtKeeper->getToken();
         //return JWT in object
