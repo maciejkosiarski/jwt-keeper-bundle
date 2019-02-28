@@ -12,6 +12,7 @@ class Jwt
 	private $type;
 	private $algorithm;
 	private $expiration;
+	private $issuedAt;
 	private $payload;
 
 	/**
@@ -44,7 +45,7 @@ class Jwt
 		return $this->expiration;
 	}
 
-	public function getPayload(): string
+	public function getPayload(): array
 	{
 		return $this->payload;
 	}
@@ -73,17 +74,22 @@ class Jwt
 			throw new JwtException('algorithm', 'null');
 		}
 
-		if (!property_exists($payload, 'exp')) {
-			throw new JwtException('expiration', 'null');
+		if (property_exists($payload, 'exp')) {
+			if (!preg_match('#[0-9]#', (string) $payload->exp)) {
+				throw new JwtException('expiration', (string) $payload->exp);
+			}
+			$this->expiration = (int)$payload->exp;
 		}
 
-		if (!preg_match('#[0-9]#', (string) $payload->exp)) {
-			throw new JwtException('expiration', (string) $payload->exp);
+		if (!property_exists($payload, 'iat')) {
+			if (!preg_match('#[0-9]#', (string) $payload->iat)) {
+				throw new JwtException('issued at', (string) $payload->iat);
+			}
+			$this->issuedAt = (int)$payload->iat;
 		}
 
 		$this->type = $header->typ;
 		$this->algorithm = $header->alg;
-		$this->expiration = (int)$payload->exp;
-		$this->payload = $payload;
+		$this->payload = (array) $payload;
 	}
 }

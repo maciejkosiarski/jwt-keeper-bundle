@@ -55,7 +55,11 @@ class JwtProvider
 
 		$jwt = $this->getJwt($token);
 
-		return !((new \DateTime())->format('U') > $jwt->getExpiration() - 300);
+		if ($jwt->getExpiration()) {
+			return !((new \DateTime())->format('U') > $jwt->getExpiration() - 300);
+		}
+
+		return true;
 	}
 
 	/**
