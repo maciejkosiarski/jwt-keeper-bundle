@@ -74,4 +74,4 @@ class AppController extends AbstarctController
 }
 ```
 
-Services: [_JwtKeeper_](../src/Service/JwtKeeper.php), [_JwtProvider_](../src/Service/JwtProvider.php), [_JwtStorage_](../src/Service/JwtStorage.php), [_Jwt_](../src/Service/Jwt.php)
+Services: [_JwtKeeper_](../master/Service/JwtKeeper.php), [_JwtProvider_](../master/Service/JwtProvider.php), [_JwtStorage_](../master/Service/JwtStorage.php), [_Jwt_](../master/Service/Jwt.php)
