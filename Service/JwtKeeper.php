@@ -10,17 +10,11 @@ class JwtKeeper
 	private $jwtProvider;
 
 	/**
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
 	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageFileNameException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
 	 */
 	public function __construct(string $serviceUrl, string $username, string $password)
 	{
 		$this->jwtProvider = new JwtProvider($serviceUrl, $username, $password);
-		$this->provideJwt();
 	}
 
 	/**

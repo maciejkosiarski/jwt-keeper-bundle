@@ -17,9 +17,17 @@
         "symfony/http-kernel": "^4.2",
         "guzzlehttp/guzzle": "^6.3"
     },
+    "require-dev": {
+        "symfony/phpunit-bridge": "^4.2"
+    },
     "autoload" : {
         "psr-4" : {
             "MaciejKosiarski\\JwtKeeperBundle\\" : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MaciejKosiarski\\JwtKeeperBundle\\Tests\\" : "tests/"
         }
     }
 }
