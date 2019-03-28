@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace MaciejKosiarski\JwtKeeperBundle\Tests;
 
-class JwtKeeperTest
+class JwtKeeperTest extends \PHPUnit\Framework\TestCase
 {
 	/**
 	 * @throws \GuzzleHttp\Exception\GuzzleException
@@ -15,10 +15,7 @@ class JwtKeeperTest
     public function testGetToken()
     {
         $jwtKeeper = new \MaciejKosiarski\JwtKeeperBundle\Service\JwtKeeper('', '', '');
-	    echo $jwtKeeper->getToken();
+
+        $this->assertInstanceOf(\MaciejKosiarski\JwtKeeperBundle\Service\JwtKeeper::class ,$jwtKeeper);
 	}
 }
-
-
-$t = new JwtKeeperTest();
-$t->testGetToken();
