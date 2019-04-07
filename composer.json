@@ -13,6 +13,7 @@
         "MIT"
     ],
     "require": {
+        "php": "7.1.0",
         "ext-json": "*",
         "symfony/http-kernel": "^4.2",
         "guzzlehttp/guzzle": "^6.3"
@@ -21,5 +22,8 @@
         "psr-4" : {
             "MaciejKosiarski\\JwtKeeperBundle\\" : ""
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.1"
     }
 }
