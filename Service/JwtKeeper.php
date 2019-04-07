@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MaciejKosiarski\JwtKeeperBundle\Service;
 
-class JwtKeeper
+class JwtKeeper implements KeeperInterface
 {
 	private $jwt;
 	private $jwtProvider;
@@ -19,9 +19,9 @@ class JwtKeeper
 	 */
 	public function __construct(string $serviceUrl, string $username, string $password)
 	{
-		$this->jwtProvider = new JwtProvider($serviceUrl, $username, $password);
-		$this->provideJwt();
-	}
+        $this->jwtProvider = new JwtProvider($serviceUrl, $username, $password);
+        $this->provideJwt();
+    }
 
 	/**
 	 * @throws \GuzzleHttp\Exception\GuzzleException
