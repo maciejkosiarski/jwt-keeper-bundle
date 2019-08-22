@@ -13,9 +13,9 @@
         "MIT"
     ],
     "require": {
-        "php": "7.1.0",
+        "php": "^7.1",
         "ext-json": "*",
-        "symfony/http-kernel": "^4.2",
+        "symfony/http-kernel": "^3.4",
         "guzzlehttp/guzzle": "^6.3"
     },
     "autoload" : {
