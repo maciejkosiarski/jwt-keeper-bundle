@@ -56,7 +56,7 @@ class JwtProvider
             $jwt = $this->getJwt($token);
 
             if (!$jwt->getExpiration()) {
-                return false;
+                return true;
             }
 
             $currentDate = new \DateTime();
@@ -116,7 +116,7 @@ class JwtProvider
 				'Content-Type' => 'application/json',
 			],
 			'json' => [
-				'username'=> $this->username,
+				'username' => $this->username,
 				'password' => $this->password,
 			],
 		];

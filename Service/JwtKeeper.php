@@ -17,38 +17,41 @@ class JwtKeeper implements KeeperInterface
 		$this->jwtProvider = new JwtProvider($serviceUrl, $username, $password);
 	}
 
-	/**
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
-	 */
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
+     */
 	public function getJwt(): Jwt
 	{
 		$this->provideJwt();
 		return $this->jwt;
 	}
 
-	/**
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
-	 */
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
+     */
 	public function getToken(): string
 	{
 		return $this->getJwt()->getToken();
 	}
 
-	/**
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
-	 */
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
+     */
 	private function provideJwt(): void
 	{
 		$this->jwt = $this->jwtProvider->provideJwt();

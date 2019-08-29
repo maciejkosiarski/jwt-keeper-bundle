@@ -40,7 +40,7 @@ class Jwt
 		return $this->algorithm;
 	}
 
-	public function getExpiration(): int
+	public function getExpiration(): ?int
 	{
 		return $this->expiration;
 	}
