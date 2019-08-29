@@ -7,6 +7,7 @@ namespace MaciejKosiarski\JwtKeeperBundle\Service;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException;
+use MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class JwtProvider
@@ -17,7 +18,7 @@ class JwtProvider
 	private $request;
 
 	/**
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageFileNameException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageCacheKeyException
 	 */
 	public function __construct(string $authUrl, string $username, string $password)
 	{
@@ -27,13 +28,14 @@ class JwtProvider
 		$this->request = new Request('POST', $authUrl);
 	}
 
-	/**
-	 * @throws InvalidJwtContentException
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
-	 */
+    /**
+     * @throws InvalidJwtContentException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
+     */
 	public function provideJwt(): Jwt
 	{
 		if (!$this->jwtIsValid()) {
@@ -43,24 +45,26 @@ class JwtProvider
 		return $this->getJwt($this->jwtStorage->getToken());
 	}
 
-	/**
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
-	 */
+    /**
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
+     */
 	private function jwtIsValid(): bool
 	{
-		if (!$token = $this->jwtStorage->getToken()) {
-			return false;
-		}
+	    try {
+            $token = $this->jwtStorage->getToken();
+            $jwt = $this->getJwt($token);
 
-		$jwt = $this->getJwt($token);
+            if (!$jwt->getExpiration()) {
+                return false;
+            }
 
-		if ($jwt->getExpiration()) {
-			$currentDate = new \DateTime();
-			return !((int) $currentDate->format('U') > $jwt->getExpiration());
-		}
+            $currentDate = new \DateTime();
 
-		return true;
+            return !((int) $currentDate->format('U') > $jwt->getExpiration());
+        } catch (RetrieveTokenException $e) {
+            return false;
+        }
 	}
 
 	/**

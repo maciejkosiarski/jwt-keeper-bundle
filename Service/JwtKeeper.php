@@ -10,7 +10,7 @@ class JwtKeeper implements KeeperInterface
 	private $jwtProvider;
 
 	/**
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageFileNameException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageCacheKeyException
 	 */
 	public function __construct(string $serviceUrl, string $username, string $password)
 	{
