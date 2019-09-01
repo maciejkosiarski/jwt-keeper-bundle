@@ -6,7 +6,6 @@ namespace MaciejKosiarski\JwtKeeperBundle\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException;
 use MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -29,10 +28,10 @@ class JwtProvider
 	}
 
     /**
-     * @throws InvalidJwtContentException
+     * @throws RetrieveTokenException
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
-     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\ScanResponseException
      * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
      * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
      */
@@ -67,11 +66,11 @@ class JwtProvider
         }
 	}
 
-	/**
-	 * @throws InvalidJwtContentException
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
-	 */
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\ScanResponseException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+     */
 	private function refreshJwt(): void
 	{
 		$response = (new Client())->send($this->request, $this->getRequestOptions());
@@ -83,11 +82,10 @@ class JwtProvider
 
 		$content = json_decode($response->getBody()->getContents());
 
-		if (!property_exists($content, 'token')) {
-			throw new InvalidJwtContentException($this->getJwtRoute(), $response->getBody()->getContents());
-		}
+		$finder = new JwtFinder();
+		$jwt = $finder->findJwt($content);
 
-		$this->storeJwt($content->token);
+		$this->storeJwt($jwt->getToken());
 	}
 
 	/**
