@@ -6,7 +6,7 @@ namespace MaciejKosiarski\JwtKeeperBundle\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use MaciejKosiarski\JwtKeeperBundle\Exception\InvalidJwtContentException;
+use MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class JwtProvider
@@ -17,7 +17,7 @@ class JwtProvider
 	private $request;
 
 	/**
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageFileNameException
+	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StorageCacheKeyException
 	 */
 	public function __construct(string $authUrl, string $username, string $password)
 	{
@@ -27,13 +27,14 @@ class JwtProvider
 		$this->request = new Request('POST', $authUrl);
 	}
 
-	/**
-	 * @throws InvalidJwtContentException
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
-	 */
+    /**
+     * @throws RetrieveTokenException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\ScanResponseException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
+     */
 	public function provideJwt(): Jwt
 	{
 		if (!$this->jwtIsValid()) {
@@ -43,31 +44,33 @@ class JwtProvider
 		return $this->getJwt($this->jwtStorage->getToken());
 	}
 
-	/**
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
-	 */
+    /**
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\JwtException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
+     */
 	private function jwtIsValid(): bool
 	{
-		if (!$token = $this->jwtStorage->getToken()) {
-			return false;
-		}
+	    try {
+            $token = $this->jwtStorage->getToken();
+            $jwt = $this->getJwt($token);
 
-		$jwt = $this->getJwt($token);
+            if (!$jwt->getExpiration()) {
+                return true;
+            }
 
-		if ($jwt->getExpiration()) {
-			$currentDate = new \DateTime();
-			return !((int) $currentDate->format('U') > $jwt->getExpiration());
-		}
+            $currentDate = new \DateTime();
 
-		return true;
+            return !((int) $currentDate->format('U') > $jwt->getExpiration());
+        } catch (RetrieveTokenException $e) {
+            return false;
+        }
 	}
 
-	/**
-	 * @throws InvalidJwtContentException
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
-	 */
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\ScanResponseException
+     * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
+     */
 	private function refreshJwt(): void
 	{
 		$response = (new Client())->send($this->request, $this->getRequestOptions());
@@ -79,11 +82,10 @@ class JwtProvider
 
 		$content = json_decode($response->getBody()->getContents());
 
-		if (!property_exists($content, 'token')) {
-			throw new InvalidJwtContentException($this->getJwtRoute(), $response->getBody()->getContents());
-		}
+		$finder = new JwtFinder();
+		$jwt = $finder->findJwt($content);
 
-		$this->storeJwt($content->token);
+		$this->storeJwt($jwt->getToken());
 	}
 
 	/**
@@ -112,7 +114,7 @@ class JwtProvider
 				'Content-Type' => 'application/json',
 			],
 			'json' => [
-				'username'=> $this->username,
+				'username' => $this->username,
 				'password' => $this->password,
 			],
 		];
