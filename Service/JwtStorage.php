@@ -4,30 +4,29 @@ declare(strict_types=1);
 
 namespace MaciejKosiarski\JwtKeeperBundle\Service;
 
-use MaciejKosiarski\JwtKeeperBundle\Exception\StorageFileNameException;
+use MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException;
+use MaciejKosiarski\JwtKeeperBundle\Exception\StorageCacheKeyException;
 use MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException;
 use MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class JwtStorage
 {
-	const STORAGE_DIR = 'var/jwt';
+	const STORAGE = 'jwt-keeper';
 
-	private $fileNameHash;
+	private $key;
+	private $cache;
 
 	/**
-	 * @throws StorageFileNameException
+	 * @throws StorageCacheKeyException
 	 */
-	public function __construct(string $fileNameHash)
+	public function __construct(string $cacheKey)
 	{
-		if (!strlen($fileNameHash) === 32) {
-			throw new StorageFileNameException();
+		if (!(strlen($cacheKey) === 32)) {
+			throw new StorageCacheKeyException($cacheKey);
 		}
-
-		$this->fileNameHash = $fileNameHash . '.txt';
-
-		if (!is_dir(self::STORAGE_DIR)) {
-			mkdir(self::STORAGE_DIR, 0777, true);
-		}
+        $this->key = $cacheKey;
+		$this->cache = new FilesystemAdapter();
 	}
 
 	/**
@@ -35,31 +34,37 @@ class JwtStorage
 	 */
 	public function storeToken(string $token): void
 	{
-		if (!file_put_contents($this->getPath(), $token)) {
-			throw new StoreTokenException($this->getPath());
+	    $cachedJwt = $this->cache->getItem($this->getCacheKey());
+        $cachedJwt->set($token);
+
+		if (!$this->cache->save($cachedJwt)) {
+			throw new StoreTokenException($this->getCacheKey());
 		}
 	}
 
-	/**
-	 * @throws UnexpectedTokenTypeException
-	 */
-	public function getToken(): ?string
+    /**
+     * @throws RetrieveTokenException
+     * @throws UnexpectedTokenTypeException
+     */
+	public function getToken(): string
 	{
-		if (!is_file($this->getPath())) {
-			return null;
-		}
+        $cachedJwt = $this->cache->getItem($this->getCacheKey());
 
-		$token = file_get_contents($this->getPath());
+        if (!$cachedJwt->isHit()) {
+            throw new RetrieveTokenException();
+        }
 
-		if (is_string($token)) {
-			return $token;
-		}
+        $token = $cachedJwt->get();
+
+        if (is_string($token)) {
+            return $token;
+        }
 
 		throw new UnexpectedTokenTypeException($token, 'string');
 	}
 
-	private function getPath(): string
+	private function getCacheKey(): string
 	{
-		return sprintf('%s/%s', self::STORAGE_DIR, $this->fileNameHash);
+		return sprintf('%s.%s', self::STORAGE, $this->key);
 	}
 }
