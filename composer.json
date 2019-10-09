@@ -17,7 +17,7 @@
         "ext-json": "*",
         "symfony/http-kernel": "^4.2",
         "guzzlehttp/guzzle": "^6.3",
-        "symfony/cache": "^4.3"
+        "symfony/cache": "^4.2"
     },
     "autoload" : {
         "psr-4" : {
