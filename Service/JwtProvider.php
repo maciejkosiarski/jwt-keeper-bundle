@@ -80,7 +80,7 @@ class JwtProvider
 			throw new HttpException($response->getStatusCode(), $message);
 		}
 
-		$content = json_decode($response->getBody()->getContents());
+		$content = json_decode($response->getBody()->getContents(), true);
 
 		$finder = new JwtFinder();
 		$jwt = $finder->findJwt($content);
