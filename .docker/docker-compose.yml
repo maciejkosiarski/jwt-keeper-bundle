@@ -1,0 +1,21 @@
+###############################################################################
+#                                 JWT Keeper                                  #
+###############################################################################
+version: "3.7"
+services:
+    jwtkeeper-php-fpm:
+        build: .
+        container_name: jwtkeeper-php-fpm
+        restart: on-failure
+        user: developer
+        tty: true
+        volumes:
+            - ~/.ssh:/home/developer/.ssh
+            - ../:/application
+            - ./config/php-ini-overrides.ini.dist:/usr/local/etc/php/conf.d/99-overrides.ini
+        networks:
+            jwtkeeper:
+                aliases:
+                    - core
+networks:
+    jwtkeeper:
