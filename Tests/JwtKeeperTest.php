@@ -26,7 +26,7 @@ class JwtKeeperTest extends TestCase
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->testHash = md5('test_hash');
 
@@ -43,7 +43,7 @@ class JwtKeeperTest extends TestCase
      * @throws UnexpectedTokenTypeException
      * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException
      */
-    public function testJWT()
+    public function testJWT(): void
     {
         $testJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
         $storage = new JwtStorage($this->testHash);
@@ -71,7 +71,7 @@ class JwtKeeperTest extends TestCase
      * @throws UnexpectedTokenTypeException
      * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException
      */
-    public function testGuzzleRequestException()
+    public function testGuzzleRequestException(): void
     {
         $this->expectException(RequestException::class);
         $jwtKeeper = new JwtKeeper('', '', '');
@@ -81,7 +81,7 @@ class JwtKeeperTest extends TestCase
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $cache = new FilesystemAdapter();
         $cache->delete(JwtStorage::STORAGE .'.'. $this->testHash);

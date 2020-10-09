@@ -19,7 +19,7 @@ class JwtStorageTest extends TestCase
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->testHash = md5('test_hash');
 
@@ -33,7 +33,7 @@ class JwtStorageTest extends TestCase
      * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\StoreTokenException
      * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
      */
-    public function testStorage()
+    public function testStorage(): void
     {
         $fakeToken = 'fake_token';
         $storage = new JwtStorage(md5('test_hash'));
@@ -42,7 +42,7 @@ class JwtStorageTest extends TestCase
         $this->assertEquals($fakeToken, $storage->getToken());
     }
 
-    public function testKeyException()
+    public function testKeyException(): void
     {
         $this->expectException(StorageCacheKeyException::class);
 
@@ -54,7 +54,7 @@ class JwtStorageTest extends TestCase
      * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\RetrieveTokenException
      * @throws \MaciejKosiarski\JwtKeeperBundle\Exception\UnexpectedTokenTypeException
      */
-    public function testFindException()
+    public function testFindException(): void
     {
         $this->expectException(RetrieveTokenException::class);
 
@@ -65,7 +65,7 @@ class JwtStorageTest extends TestCase
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $cache = new FilesystemAdapter();
         $cache->delete(JwtStorage::STORAGE .'.'. $this->testHash);
