@@ -13,11 +13,11 @@
         "MIT"
     ],
     "require": {
-        "php": "^7.1",
+        "php": "^7.4",
         "ext-json": "*",
-        "symfony/http-kernel": "^4.2",
+        "symfony/http-kernel": "5.1",
         "guzzlehttp/guzzle": "^6.3",
-        "symfony/cache": "^4.2"
+        "symfony/cache": "5.1"
     },
     "autoload" : {
         "psr-4" : {
@@ -25,7 +25,7 @@
         }
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^4.3",
-        "symfony/var-dumper": "^4.3"
+        "symfony/phpunit-bridge": "5.1",
+        "symfony/var-dumper": "5.1"
     }
 }
