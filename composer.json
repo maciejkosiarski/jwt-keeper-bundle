@@ -15,9 +15,9 @@
     "require": {
         "php": "^7.4",
         "ext-json": "*",
-        "symfony/http-kernel": "5.1.5",
+        "symfony/http-kernel": "5.1.7",
         "guzzlehttp/guzzle": "^6.3",
-        "symfony/cache": "5.1"
+        "symfony/cache": "5.1.7"
     },
     "autoload" : {
         "psr-4" : {
@@ -25,7 +25,7 @@
         }
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "5.1",
-        "symfony/var-dumper": "5.1"
+        "symfony/phpunit-bridge": "5.1.7",
+        "symfony/var-dumper": "5.1.7"
     }
 }
