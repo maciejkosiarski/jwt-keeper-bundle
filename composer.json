@@ -15,7 +15,7 @@
     "require": {
         "php": "^7.4",
         "ext-json": "*",
-        "symfony/http-kernel": "5.1.7",
+        "symfony/http-kernel": "5.4.20",
         "guzzlehttp/guzzle": "^6.3",
         "symfony/cache": "5.1.7"
     },
